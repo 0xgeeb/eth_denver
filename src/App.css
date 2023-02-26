@@ -35,6 +35,13 @@
   color: white;
 }
 
+.create-div {
+  margin-top: 20%;
+  margin: auto;
+  font-size: 3rem;
+  font-weight: 700;
+}
+
 .address-div {
   margin-top: 20%;
   margin-left: auto;
