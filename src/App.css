@@ -28,6 +28,7 @@
   cursor: pointer;
   color: green;
   font-weight: 700;
+  margin-left: 24px;
 }
 .header-button:hover {
   border-color: rgb(255, 255, 255);
@@ -46,4 +47,10 @@
   margin-top: 20%;
   margin-left: auto;
   margin-right: auto;
+}
+
+.account-info-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
