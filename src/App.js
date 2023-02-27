@@ -7,7 +7,7 @@ import { useWeb3React } from "@web3-react/core";
 import { Network, Alchemy } from "alchemy-sdk";
 
 const settings = {
-  apiKey: "whiycWcW9NS-2DF3nBWhi4fogmFkJDcQ",
+  apiKey: process.env.ALCHEMY_API_KEY,
   network: Network.ETH_GOERLI
 }
 
