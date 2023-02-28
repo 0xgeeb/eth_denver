@@ -11,7 +11,7 @@ const settings = {
   network: Network.ETH_GOERLI
 }
 
-const alchemy = new Alchemy(settings)
+const alchemy = new Alchemy(settings);
 
 export const injected = new InjectedConnector();
 const ENS_ABI = constants.abi.goerli;
@@ -19,7 +19,10 @@ const ENS_ADDRESS = constants.address.goerli;
 
 function App() {
   const [hasMetamask, setHasMetamask] = useState(false);
-  const [ownedEns, setOwnedEns] = useState([])
+  const [ownedEns, setOwnedEns] = useState(null);
+  const [selectedEns, setSelectedEns] = useState(null);
+  const [typedSubdomain, setTypedSubdomain] = useState("");
+  const [isEnsSelected, setIsEnsSelected] = useState(false);
 
   const {
     active,
@@ -31,23 +34,26 @@ function App() {
 
   useEffect(() => {
     async function fetchEnsNames() {
-      if(active) {
-        const nftsForOwner = await alchemy.nft.getNftsForOwner(account)
-        console.log(nftsForOwner.ownedNfts)
-        const ensArray = []
-        for(let i = 0; i < nftsForOwner.ownedNfts.length; i++) {
-          if(nftsForOwner.ownedNfts[i].contract.address.toLowerCase() === ENS_ADDRESS.toLowerCase()) {
-            const split = nftsForOwner.ownedNfts[i].description.split(",")
-            console.log(split[0])
-            ensArray.push(split[0])
+      if (active) {
+        const nftsForOwner = await alchemy.nft.getNftsForOwner(account);
+        console.log(nftsForOwner.ownedNfts);
+        const ensArray = [];
+        for (let i = 0; i < nftsForOwner.ownedNfts.length; i++) {
+          if (
+            nftsForOwner.ownedNfts[i].contract.address.toLowerCase() ===
+            ENS_ADDRESS.toLowerCase()
+          ) {
+            const split = nftsForOwner.ownedNfts[i].description.split(",");
+            console.log(split[0]);
+            ensArray.push(split[0]);
           }
         }
-        setOwnedEns(ensArray)
+        setOwnedEns(ensArray);
       }
     }
 
-    fetchEnsNames()
-  }, [active])
+    fetchEnsNames();
+  }, [active]);
 
   async function connectWallet() {
     if (typeof window.ethereum !== "undefined") {
@@ -62,6 +68,13 @@ function App() {
     }
   }
 
+  async function handleSelectEns(e) {
+    setSelectedEns(e.target.value);
+    setIsEnsSelected(true);
+  }
+
+  async function handleSubmit(e) {}
+
   return (
     <div className="app">
       <div className="header">
@@ -73,12 +86,50 @@ function App() {
           </button>
         </div>
       </div>
-      <div>
-        {
-          ownedEns && ownedEns.map((ens) => {
-            return <p>{ens}</p>
-          })
-        }
+      <div className="choose-doteth-section">
+        {isEnsSelected ? (
+          <div>
+            <p>type subdomain</p>
+            <form>
+              <input
+                type="text"
+                value={typedSubdomain}
+                onChange={(e) => setTypedSubdomain(e.target.value)}
+              />
+              <input
+                type="submit"
+                style={{ display: "none" }}
+                onClick={(e) => handleSubmit(e)}
+              />
+            </form>
+            <p>{`${typedSubdomain}.${selectedEns}`}</p>
+          </div>
+        ) : (
+          ownedEns && (
+            <>
+              <p>choose .eth</p>
+              <form>
+                <div className="ens-container">
+                  {ownedEns.map((ens) => {
+                    return (
+                      <div key={ens}>
+                        <input
+                          type="radio"
+                          id={ens}
+                          name="ens_option"
+                          value={ens}
+                          className="radio-button"
+                          onChange={(e) => handleSelectEns(e)}
+                        />
+                        <label htmlFor={ens}>{ens}</label>
+                      </div>
+                    );
+                  })}
+                </div>
+              </form>
+            </>
+          )
+        )}
       </div>
     </div>
   );
