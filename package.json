@@ -3,17 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@ethersproject/providers": "^5.7.2",
+    "@ethersproject/solidity": "^5.7.0",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",
     "alchemy-sdk": "^2.4.3",
+    "browserify": "^17.0.0",
+    "buffer": "^6.0.3",
     "ethers": "^6.0.8",
+    "idna-uts46-hx": "^4.1.2",
+    "js-sha3": "^0.8.0",
+    "punycode": "^2.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "tape": "^5.6.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "bundle": "rollup --config rollup.config.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -36,5 +47,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "rollup": "^2.79.1",
+    "rollup-plugin-polyfill-node": "github:FredKSchott/rollup-plugin-polyfill-node"
   }
 }
