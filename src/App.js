@@ -7,9 +7,9 @@ import { useWeb3React } from "@web3-react/core";
 import { Network, Alchemy } from "alchemy-sdk";
 
 const settings = {
-  apiKey: process.env.ALCHEMY_API_KEY,
-  network: Network.ETH_GOERLI
-}
+  apiKey: "3yeNGQ-JU51M9TPzks7BjCqlaBkiC1ey",
+  network: Network.ETH_GOERLI,
+};
 
 const alchemy = new Alchemy(settings);
 
@@ -23,6 +23,7 @@ function App() {
   const [selectedEns, setSelectedEns] = useState(null);
   const [typedSubdomain, setTypedSubdomain] = useState("");
   const [isEnsSelected, setIsEnsSelected] = useState(false);
+  const [mintingPage, setMintingPage] = useState(false);
 
   const {
     active,
@@ -73,7 +74,10 @@ function App() {
     setIsEnsSelected(true);
   }
 
-  async function handleSubmit(e) {}
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setMintingPage(true);
+  }
 
   return (
     <div className="app">
@@ -87,7 +91,14 @@ function App() {
         </div>
       </div>
       <div className="choose-doteth-section">
-        {isEnsSelected ? (
+        {isEnsSelected && mintingPage ? (
+          <div>
+            <p>minting</p>
+            <p>
+              {typedSubdomain}.{selectedEns}
+            </p>
+          </div>
+        ) : isEnsSelected && !mintingPage ? (
           <div>
             <p>type subdomain</p>
             <form>
