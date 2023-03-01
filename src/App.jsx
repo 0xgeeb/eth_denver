@@ -7,8 +7,8 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Subdomains />} />
-        <Route path="/register" element={<Domains />} />
+        <Route path="/subdomains" element={<Subdomains />} />
+        <Route path="/domains" element={<Domains />} />
       </Routes>
     </Router>
   )
