@@ -19,6 +19,9 @@ const ENS_ABI_MAIN = constants.abi.base;
 const ENS_ADDRESS = constants.address.base;
 const NAME_WRAPPER_ADDRESS = constants.address.nameWrapper;
 const NAME_WRAPPER_ABI = constants.abi.nameWrapper;
+const RESOLVER_ADDRESS = constants.address.resolver;
+const REGISTRY_ABI = constants.abi.registryWithFallback;
+const REGISTRY_ADDRESS = constants.address.registryWithFallback;
 
 function Subdomains() {
   const [hasMetamask, setHasMetamask] = useState(false);
@@ -80,8 +83,8 @@ function Subdomains() {
     setMintingPage(true);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(
-      NAME_WRAPPER_ADDRESS,
-      NAME_WRAPPER_ABI,
+      REGISTRY_ADDRESS,
+      REGISTRY_ABI,
       signer
     );
     const x0 = 0;
@@ -97,9 +100,14 @@ function Subdomains() {
       ["bytes32", "bytes32"],
       [eth, labelHash]
     );
-    console.log(typedSubdomain);
+    const subdomainHash = ethers.utils.keccak256(
+      textEncoder.encode(typedSubdomain)
+    );
+    console.log(typedSubdomain)
+    console.log(parentNode)
+    console.log(subdomainHash)
     try {
-      await contract.setSubnodeOwner(parentNode, typedSubdomain, account, 0, 0);
+      await contract.setSubnodeRecord(parentNode, subdomainHash, account, RESOLVER_ADDRESS, 0);
     } catch (e) {
       console.log(e);
     }
@@ -110,8 +118,8 @@ function Subdomains() {
       <div className="header">
         <h1>ens subdomain infra</h1>
         <div className="account-info-div">
-          <a href="/wrapsubdomain"><button className="header-button">wrapsubdomain</button></a>
-          <a href="/register"><button className="header-button">register</button></a>
+          <a href="/subdomains"><button className="header-button">subdomains</button></a>
+          <a href="/domains"><button className="header-button">domains</button></a>
           {account}
           <button className="header-button" onClick={connectWallet}>
             {hasMetamask ? "connected" : "connect wallet"}
@@ -146,7 +154,7 @@ function Subdomains() {
         ) : (
           ownedEns && (
             <>
-              <p>choose .eth to wrap</p>
+              <p>choose .eth to mint a subdomain on</p>
               <form>
                 <div className="ens-container">
                   {ownedEns.map((ens) => {

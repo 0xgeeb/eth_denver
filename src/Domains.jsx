@@ -16,6 +16,7 @@ const alchemy = new Alchemy(settings);
 export const injected = new InjectedConnector();
 const ENS_ABI = constants.abi.controller;
 const ENS_ADDRESS = constants.address.controller;
+const RESOLVER_ADDRESS = constants.address.resolver;
 
 function Domains() {
  
@@ -63,7 +64,7 @@ function Domains() {
   async function register() {
     const signer = provider.getSigner()
     const contractObject = new ethers.Contract(ENS_ADDRESS, ENS_ABI, signer)  
-    const registerTx = await contractObject.registerWithConfig(registeredName, account, 94670856, '0x7375706572736563726574000000000000000000000000000000000000000000', '0x0000000000000000000000000000000000000000', '0x0000000000000000000000000000000000000000', {value: ethers.utils.parseEther('0.2', 'ether')});
+    const registerTx = await contractObject.registerWithConfig(registeredName, account, 94670856, '0x7375706572736563726574000000000000000000000000000000000000000000', RESOLVER_ADDRESS, account, {value: ethers.utils.parseEther('0.2', 'ether')});
     console.log(registerTx);
   }
 
@@ -72,8 +73,8 @@ function Domains() {
       <div className="header">
         <h1>ens subdomain infra</h1>
         <div className="account-info-div">
-          <a href="/wrapsubdomain"><button className="header-button">wrapsubdomain</button></a>
-          <a href="/register"><button className="header-button">register</button></a>
+          <a href="/subdomains"><button className="header-button">subdomains</button></a>
+          <a href="/domains"><button className="header-button">domains</button></a>
           {account}
           <button className="header-button" onClick={connectWallet}>
             {hasMetamask ? "connected" : "connect wallet"}
