@@ -20,7 +20,7 @@ const ENS_ADDRESS = constants.addressMain.goerli;
 const NAME_WRAPPER_ADDRESS = constants.addressNameWrapper.goerli;
 const NAME_WRAPPER_ABI = constants.abiNameWraper.goerli;
 
-function App() {
+function Subdomains() {
   const [hasMetamask, setHasMetamask] = useState(false);
   const [ownedEns, setOwnedEns] = useState(null);
   const [selectedEns, setSelectedEns] = useState(null);
@@ -110,6 +110,7 @@ function App() {
       <div className="header">
         <h1>ens subdomain infra</h1>
         <div className="account-info-div">
+        <a href="/register"><button className="header-button">register</button></a>
           {account}
           <button className="header-button" onClick={connectWallet}>
             {hasMetamask ? "connected" : "connect wallet"}
@@ -172,4 +173,4 @@ function App() {
   );
 }
 
-export default App;
+export default Subdomains;
