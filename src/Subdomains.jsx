@@ -5,17 +5,21 @@ import constants from "./constants/constants";
 import { InjectedConnector } from "@web3-react/injected-connector";
 import { useWeb3React } from "@web3-react/core";
 import { Network, Alchemy } from "alchemy-sdk";
+import { namehash, normalize } from "./ens-package";
+import uts46 from "idna-uts46-hx";
 
 const settings = {
-  apiKey: "whiycWcW9NS-2DF3nBWhi4fogmFkJDcQ",
-  network: Network.ETH_GOERLI
-}
+  apiKey: "3yeNGQ-JU51M9TPzks7BjCqlaBkiC1ey",
+  network: Network.ETH_GOERLI,
+};
 
 const alchemy = new Alchemy(settings);
 
 export const injected = new InjectedConnector();
-const ENS_ABI = constants.abi.goerli;
-const ENS_ADDRESS = constants.address.goerli;
+const ENS_ABI_MAIN = constants.abiMain.goerli;
+const ENS_ADDRESS = constants.addressMain.goerli;
+const NAME_WRAPPER_ADDRESS = constants.addressNameWrapper.goerli;
+const NAME_WRAPPER_ABI = constants.abiNameWraper.goerli;
 
 function Subdomains() {
   
@@ -24,6 +28,7 @@ function Subdomains() {
   const [selectedEns, setSelectedEns] = useState(null);
   const [typedSubdomain, setTypedSubdomain] = useState("");
   const [isEnsSelected, setIsEnsSelected] = useState(false);
+  const [mintingPage, setMintingPage] = useState(false);
 
   const {
     active,
@@ -52,6 +57,7 @@ function Subdomains() {
     }
 
     fetchEnsNames();
+    console.log(namehash);
   }, [active]);
 
   async function connectWallet() {
@@ -74,7 +80,27 @@ function Subdomains() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(typedSubdomain);
+    setMintingPage(true);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      NAME_WRAPPER_ADDRESS,
+      NAME_WRAPPER_ABI,
+      signer
+    );
+    console.log("hiiiiii");
+    let hashValue = namehash(selectedEns);
+    console.log("yooooooo");
+    let label = typedSubdomain;
+    let owner = signer;
+    let fuses = 0;
+    let expiry = Math.floor(Date.now() / 1000) + 10 * 365 * 24 * 60 * 60;
+    try {
+      await contract.setSubnodeOwner(hashValue, label, owner, fuses, expiry);
+      console.log("success");
+    } catch (error) {
+      console.log(error);
+      console.log("fail");
+    }
   }
 
   return (
@@ -90,7 +116,14 @@ function Subdomains() {
         </div>
       </div>
       <div className="choose-doteth-section">
-        {isEnsSelected ? (
+        {isEnsSelected && mintingPage ? (
+          <div>
+            <p>minting</p>
+            <p>
+              {typedSubdomain}.{selectedEns}
+            </p>
+          </div>
+        ) : isEnsSelected && !mintingPage ? (
           <div>
             <p>type subdomain</p>
             <form>
