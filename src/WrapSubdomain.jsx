@@ -17,7 +17,7 @@ export const injected = new InjectedConnector();
 const ENS_ABI = constants.abi.controller;
 const ENS_ADDRESS = constants.address.controller;
 
-function Domains() {
+function WrapSubdomain() {
  
   const [hasMetamask, setHasMetamask] = useState(false);
   const [registeredName, setRegisteredName] = useState("");
@@ -89,4 +89,4 @@ function Domains() {
   );
 }
 
-export default Domains;
+export default WrapSubdomain;

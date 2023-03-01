@@ -15,10 +15,10 @@ const alchemy = new Alchemy(settings);
 
 const textEncoder = new TextEncoder();
 export const injected = new InjectedConnector();
-const ENS_ABI_MAIN = constants.abiMain.goerli;
-const ENS_ADDRESS = constants.addressMain.goerli;
-const NAME_WRAPPER_ADDRESS = constants.addressNameWrapper.goerli;
-const NAME_WRAPPER_ABI = constants.abiNameWraper.goerli;
+const ENS_ABI_MAIN = constants.abi.base;
+const ENS_ADDRESS = constants.address.base;
+const NAME_WRAPPER_ADDRESS = constants.address.nameWrapper;
+const NAME_WRAPPER_ABI = constants.abi.nameWrapper;
 
 function Subdomains() {
   const [hasMetamask, setHasMetamask] = useState(false);
@@ -110,7 +110,8 @@ function Subdomains() {
       <div className="header">
         <h1>ens subdomain infra</h1>
         <div className="account-info-div">
-        <a href="/register"><button className="header-button">register</button></a>
+          <a href="/wrapsubdomain"><button className="header-button">wrapsubdomain</button></a>
+          <a href="/register"><button className="header-button">register</button></a>
           {account}
           <button className="header-button" onClick={connectWallet}>
             {hasMetamask ? "connected" : "connect wallet"}
