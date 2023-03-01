@@ -14,8 +14,8 @@ const settings = {
 const alchemy = new Alchemy(settings);
 
 export const injected = new InjectedConnector();
-const ENS_ABI = constants.abi.goerlicontroller;
-const ENS_ADDRESS = constants.addressMain.goerlicontroller;
+const ENS_ABI = constants.abi.controller;
+const ENS_ADDRESS = constants.address.controller;
 
 function Domains() {
  
