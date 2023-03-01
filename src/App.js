@@ -5,8 +5,6 @@ import constants from "./constants/constants";
 import { InjectedConnector } from "@web3-react/injected-connector";
 import { useWeb3React } from "@web3-react/core";
 import { Network, Alchemy } from "alchemy-sdk";
-import { namehash, normalize } from "./ens-package";
-import uts46 from "idna-uts46-hx";
 
 const settings = {
   apiKey: "3yeNGQ-JU51M9TPzks7BjCqlaBkiC1ey",
@@ -15,6 +13,7 @@ const settings = {
 
 const alchemy = new Alchemy(settings);
 
+const textEncoder = new TextEncoder();
 export const injected = new InjectedConnector();
 const ENS_ABI_MAIN = constants.abiMain.goerli;
 const ENS_ADDRESS = constants.addressMain.goerli;
@@ -56,7 +55,6 @@ function App() {
     }
 
     fetchEnsNames();
-    console.log(namehash);
   }, [active]);
 
   async function connectWallet() {
@@ -86,19 +84,24 @@ function App() {
       NAME_WRAPPER_ABI,
       signer
     );
-    console.log("hiiiiii");
-    let hashValue = namehash(selectedEns);
-    console.log("yooooooo");
-    let label = typedSubdomain;
-    let owner = signer;
-    let fuses = 0;
-    let expiry = Math.floor(Date.now() / 1000) + 10 * 365 * 24 * 60 * 60;
+    const x0 = 0;
+    const x1 = ethers.utils.keccak256(textEncoder.encode("eth"));
+    const eth = ethers.utils.solidityKeccak256(
+      ["uint256", "bytes32"],
+      [x0, x1]
+    );
+    const labelHash = ethers.utils.keccak256(
+      textEncoder.encode(selectedEns.split(".")[0])
+    );
+    const parentNode = ethers.utils.solidityKeccak256(
+      ["bytes32", "bytes32"],
+      [eth, labelHash]
+    );
+    console.log(typedSubdomain);
     try {
-      await contract.setSubnodeOwner(hashValue, label, owner, fuses, expiry);
-      console.log("success");
-    } catch (error) {
-      console.log(error);
-      console.log("fail");
+      await contract.setSubnodeOwner(parentNode, typedSubdomain, account, 0, 0);
+    } catch (e) {
+      console.log(e);
     }
   }
 
@@ -141,7 +144,7 @@ function App() {
         ) : (
           ownedEns && (
             <>
-              <p>choose .eth</p>
+              <p>choose .eth to wrap</p>
               <form>
                 <div className="ens-container">
                   {ownedEns.map((ens) => {
