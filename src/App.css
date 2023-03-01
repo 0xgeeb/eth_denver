@@ -132,3 +132,14 @@ input[type="text"]:focus {
   outline: none;
   border: 2px solid #008cba;
 }
+
+.input-div {
+  width: 75%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-h1 {
+  margin: auto;
+}
