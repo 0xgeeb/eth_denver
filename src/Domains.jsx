@@ -15,10 +15,10 @@ const alchemy = new Alchemy(settings);
 
 export const injected = new InjectedConnector();
 const ENS_ABI = constants.abi.goerlicontroller;
-const ENS_ADDRESS = constants.address.goerlicontroller;
+const ENS_ADDRESS = constants.addressMain.goerlicontroller;
 
 function Domains() {
-  
+ 
   const [hasMetamask, setHasMetamask] = useState(false);
   const [registeredName, setRegisteredName] = useState("");
   const [commitment, setCommitment] = useState("");
@@ -59,11 +59,11 @@ function Domains() {
     const commitTx = await contractObject.commit(makeCommitTx);
     console.log(commitTx);
   }
-  
+ 
   async function register() {
     const signer = provider.getSigner()
     const contractObject = new ethers.Contract(ENS_ADDRESS, ENS_ABI, signer)  
-    const registerTx = await contractObject.registerWithConfig(registeredName, account, 94670856, '0x7375706572736563726574000000000000000000000000000000000000000000', '0x0000000000000000000000000000000000000000', '0x0000000000000000000000000000000000000000', {value: ethers.parseEther('0.2', 'ether')});
+    const registerTx = await contractObject.registerWithConfig(registeredName, account, 94670856, '0x7375706572736563726574000000000000000000000000000000000000000000', '0x0000000000000000000000000000000000000000', '0x0000000000000000000000000000000000000000', {value: ethers.utils.parseEther('0.2', 'ether')});
     console.log(registerTx);
   }
 
