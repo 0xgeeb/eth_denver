@@ -38,34 +38,34 @@ const settings = {
       library: provider,
     } = useWeb3React();
   
-   useEffect(() => {
-      async function fetchEnsNames() {
-        if (active) {
-          const nftsForOwner = await alchemy.nft.getNftsForOwner(account);
-          console.log(nftsForOwner);
-          const wrappedEnsArray = [];
-          const unwrappedEnsArray = [];
-          for (let i = 0; i < nftsForOwner.ownedNfts.length; i++) {
-            if (
-              nftsForOwner.ownedNfts[i].contract.address.toLowerCase() ===
-              ENS_ADDRESS.toLowerCase()
-            ) {
-              const split = nftsForOwner.ownedNfts[i].description.split(",");
-              unwrappedEnsArray.push(split[0]);
-            }
-          }
-          const contract = new ethers.Contract(
-            NAME_WRAPPER_ADDRESS,
-            NAME_WRAPPER_ABI
-          );
-          }
-            setWrappedNames(wrappedEnsArray);
-            setUnwrappedNames(unwrappedEnsArray);
-        }
+  //  useEffect(() => {
+  //     async function fetchEnsNames() {
+  //       if (active) {
+  //         const nftsForOwner = await alchemy.nft.getNftsForOwner(account);
+  //         console.log(nftsForOwner);
+  //         const wrappedEnsArray = [];
+  //         const unwrappedEnsArray = [];
+  //         for (let i = 0; i < nftsForOwner.ownedNfts.length; i++) {
+  //           if (
+  //             nftsForOwner.ownedNfts[i].contract.address.toLowerCase() ===
+  //             ENS_ADDRESS.toLowerCase()
+  //           ) {
+  //             const split = nftsForOwner.ownedNfts[i].description.split(",");
+  //             unwrappedEnsArray.push(split[0]);
+  //           }
+  //         }
+  //         const contract = new ethers.Contract(
+  //           NAME_WRAPPER_ADDRESS,
+  //           NAME_WRAPPER_ABI
+  //         );
+  //         }
+  //           setWrappedNames(wrappedEnsArray);
+  //           setUnwrappedNames(unwrappedEnsArray);
+  //       }
       
       
-      fetchEnsNames();
-    }, [active]);
+  //     fetchEnsNames();
+  //   }, [active]);
 
     async function connectWallet() {
       if (typeof window.ethereum !== "undefined") {

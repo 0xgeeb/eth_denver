@@ -17,7 +17,7 @@ contract RegisterENSTest is Test {
   function testCall() public {
     string memory label = "past";
     uint256 tokenId = uint256(keccak256(bytes(label)));
-    console.log(tokenId);
+    console.log(address(0));
   }
 
   function testGeeb() public {
