@@ -20,6 +20,7 @@ const RESOLVER_ADDRESS = constants.address.resolver;
 function Domains({ web3 }) {
  
   
+  
   const [registeredName, setRegisteredName] = useState("");
   const [commitment, setCommitment] = useState("");
 
