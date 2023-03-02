@@ -31,26 +31,26 @@ function Subdomains({ web3 }) {
   
 
 
-  // useEffect(() => {
-  //   async function fetchEnsNames() {
-  //     if (web3.active) {
-  //       const nftsForOwner = await alchemy.nft.getNftsForOwner(web3.account);
-  //       const ensArray = [];
-  //       for (let i = 0; i < nftsForOwner.ownedNfts.length; i++) {
-  //         if (
-  //           nftsForOwner.ownedNfts[i].contract.address.toLowerCase() ===
-  //           ENS_ADDRESS.toLowerCase()
-  //         ) {
-  //           const split = nftsForOwner.ownedNfts[i].description.split(",");
-  //           ensArray.push(split[0]);
-  //         }
-  //       }
-  //       setOwnedEns(ensArray);
-  //     }
-  //   }
+  useEffect(() => {
+    async function fetchEnsNames() {
+      if (web3.active) {
+        const nftsForOwner = await alchemy.nft.getNftsForOwner(web3.account);
+        const ensArray = [];
+        for (let i = 0; i < nftsForOwner.ownedNfts.length; i++) {
+          if (
+            nftsForOwner.ownedNfts[i].contract.address.toLowerCase() ===
+            ENS_ADDRESS.toLowerCase()
+          ) {
+            const split = nftsForOwner.ownedNfts[i].description.split(",");
+            ensArray.push(split[0]);
+          }
+        }
+        setOwnedEns(ensArray);
+      }
+    }
 
-  //   fetchEnsNames();
-  // }, [web3.active]);
+    fetchEnsNames();
+  }, [web3.active]);
 
   async function handleSelectEns(e) {
     setSelectedEns(e.target.value);
