@@ -15,8 +15,8 @@ contract RegisterENSTest is Test {
   }
 
   function testCall() public {
-    // (bool success, bytes memory data) = geeb.call{value: 0.5 ether}("");
-    // require(success, "call failed");
+    string memory label = "past";
+    uint256 tokenId = uint256(keccak256(bytes(label)));
     console.log(address(0));
   }
 
