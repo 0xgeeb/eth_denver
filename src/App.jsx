@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react"
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom"
 import { InjectedConnector } from "@web3-react/injected-connector";
 import { useWeb3React } from "@web3-react/core"
-import Subdomains from "./Subdomains.jsx"
+import NewDomains from "./NewDomains.jsx"
 import Domains from "./Domains.jsx"
-import Wrap from "./Wrap.jsx"
 
 export default function App() {
 
@@ -66,7 +65,7 @@ export default function App() {
     }
     else {
       if(isLoading) {
-        return "..."
+        return "   ...   "
       }
       else {
         return "connect wallet"
@@ -87,21 +86,24 @@ export default function App() {
     <Router>
       <div className="app">
         <div className="header">
-          <h1>ens subdomain infra</h1>
+          <a href="/" className="header-title-anchor"><h1 className="header-title">ens subdomain infra</h1></a>
           <div className="account-info-div">
-            <a href="/wrap"><button className="header-button">wrap</button></a>
-            <a href="/subdomains"><button className="header-button">subdomains</button></a>
+            <a href="/newdomains"><button className="header-button">new domains</button></a>
             <a href="/domains"><button className="header-button">domains</button></a>
-            {/* {web3.account} */}
-            <button className="header-button" onClick={() => clickButton()}>
+            <button className="header-button-connect" onClick={() => clickButton()}>
               {renderButton()}
             </button>
           </div>
         </div>
+        <div class="bg-animation">
+          <div id="stars"></div>
+          <div id="stars2"></div>
+          <div id="stars3"></div>
+          <div id="stars4"></div>
+        </div>
         <Routes>
-          <Route path="/subdomains" element={<Subdomains web3={web3} />} />
+          <Route path="/newdomains" element={<NewDomains web3={web3} />} />
           <Route path="/domains" element={<Domains web3={web3} />} />
-          <Route path="/wrap" element={<Wrap web3={web3} />} />
         </Routes>
       </div>
     </Router>
