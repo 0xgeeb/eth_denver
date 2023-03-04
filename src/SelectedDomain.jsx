@@ -3,6 +3,7 @@ import "./App.css";
 import constants from "./constants/constants";
 import {ethers} from "ethers";
 import convertToParentNode from "./utils/utils";
+import {FaSpinner} from "react-icons/fa"
 
 const textEncoder = new TextEncoder();
 const RESOLVER_ADDRESS = constants.address.resolver;
@@ -11,29 +12,25 @@ const REGISTRY_ADDRESS = constants.address.registryWithFallback;
 
 
 export default function SelectedDomain({ web3, name }) {
-  const [subdomain, setSubdomain] = useState("")
-  const [mintingPage, setMintingPage] = useState(false)
+  const [subdomain, setSubdomain] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleKeyDown = (event) => {
     if(event.key === 'Enter') {
-      handleSubmit()
+      handleSubmit(event)
     }
   }
 
-  async function handleSubdomainChange(e) {
-    e.preventDefault();
-    setSubdomain(e.target.value)
-  }
-
-  async function handleSubmit() {
-    setMintingPage(true);
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setLoading(true);
     const signer = web3.library.getSigner();
     const contract = new ethers.Contract(
       REGISTRY_ADDRESS,
       REGISTRY_ABI,
       signer
     );
-    const parentNode = convertToParentNode({name})
+    const parentNode = convertToParentNode(name.split(".")[0])
     const subdomainHash = ethers.utils.keccak256(
       textEncoder.encode(subdomain)
     );
@@ -45,6 +42,7 @@ export default function SelectedDomain({ web3, name }) {
      } catch (e) {
        console.log(e);
      }
+     setLoading(false);
   }
 
   return (
@@ -60,9 +58,14 @@ export default function SelectedDomain({ web3, name }) {
           id="subdomain-input"
           value={subdomain}
           onKeyDown={handleKeyDown}
-          onChange={(e) => {handleSubdomainChange(e)}}
+          onChange={(e) => setSubdomain(e.target.value)}
         />
         </div>
+        {loading && (
+          <div className="loading-spinner">
+            <FaSpinner className="spinner" />
+          </div>
+        )}
       </form>
   </div>
   );
