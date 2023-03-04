@@ -7,6 +7,7 @@ import { useWeb3React } from "@web3-react/core";
 import { Network, Alchemy } from "alchemy-sdk";
 import convertToParentNode from "./utils/utils";
 import SelectedDomain from "./SelectedDomain";
+import ExploreDomains from "./ExploreDomains";
 
 
   const settings = {
@@ -27,9 +28,7 @@ import SelectedDomain from "./SelectedDomain";
     const [selectedEns, setSelectedEns] = useState(null);
     const [isEnsSelected, setIsEnsSelected] = useState(false);
     const [selectedDomain, setSelectedDomain] = useState(null);
-
-
-  
+    
     useEffect(() => {
         async function fetchEnsNames() {
           if (web3.active) {
@@ -64,8 +63,8 @@ import SelectedDomain from "./SelectedDomain";
         <div className="domains-list-container">
           {isEnsSelected ? (
             <div>
-              <button onClick={() => setIsEnsSelected(false)} className="back-to-domains-button">Back Home</button>
-              <SelectedDomain name={selectedDomain} />
+              <button onClick={() => setIsEnsSelected(false)} className="back-to-domains-button">Back To Domains List</button>
+              <SelectedDomain web3={web3} name={selectedDomain} />
             </div>
           ) : (
             <div>
@@ -75,7 +74,7 @@ import SelectedDomain from "./SelectedDomain";
                   <div className="ens-domains-container">
                     {ownedEns.map((ens) => {
                       return (
-                        <div key={ens}>
+                        <div className="domains-name-container" key={ens}>
                         <input
                           type="radio"
                           id={ens}
