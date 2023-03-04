@@ -14,6 +14,7 @@ const REGISTRY_ADDRESS = constants.address.registryWithFallback;
 export default function SelectedDomain({ web3, name }) {
   const [subdomain, setSubdomain] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mintPage, setMintPage] = useState(false);
 
   const handleKeyDown = (event) => {
     if(event.key === 'Enter') {
@@ -43,6 +44,7 @@ export default function SelectedDomain({ web3, name }) {
        console.log(e);
      }
      setLoading(false);
+     setMintPage(true);
   }
 
   return (
@@ -51,19 +53,26 @@ export default function SelectedDomain({ web3, name }) {
     <form>
         <label className="enter-subdomain-label" htmlFor="subdomain-input">Mint Subdomain:</label>
         <div className="input-subdomain-container">
-        <p className="absolute-ending">.{name}</p>
-        <input
-          className="subdomain-input"
-          type="text"
-          id="subdomain-input"
-          value={subdomain}
-          onKeyDown={handleKeyDown}
-          onChange={(e) => setSubdomain(e.target.value)}
-        />
+          <p className="absolute-ending">.{name}</p>
+          <input
+            className="subdomain-input"
+            type="text"
+            id="subdomain-input"
+            value={subdomain}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => setSubdomain(e.target.value)}
+          />
         </div>
         {loading && (
-          <div className="loading-spinner">
-            <FaSpinner className="spinner" />
+          <>
+            <div className="loading-spinner">
+              <FaSpinner className="spinner" />
+            </div>
+          </>
+        )}
+        {mintPage && (
+          <div className="mint-success-container">
+          <h1 className="mint-success">You successfully minted {subdomain}.{name}</h1>
           </div>
         )}
       </form>

@@ -426,22 +426,48 @@ label {
 .subdomain-input {
   border: 1px solid #cccccc;
   border-radius: 4px;
-  padding: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
   font-size: 1.5rem;
   width: 100%;
-  max-width: 400px;
 }
 
 .input-subdomain-container{
   display: inline-block;
-  width: 62%;
+  width: 26.73vw;
 }
 
 .absolute-ending {
   position: absolute;
   font-size: 1.4rem;
   font-weight: bold;
-  top: 35%;
-  right: 60%;
+  top: 49%;
+  right: 54%;
   color: black;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50vw;
+  padding: 25px;
+}
+
+.spinner {
+  color: white;
+  font-size: 50px;
+}
+
+.mint-success {
+  color: white;
+  font-size: 2rem;
+}
+
+.mint-success-container {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
