@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import constants from "./constants/constants";
 import "./App.css";
 
-export default function NewDomains({ web3 }) {
+export default function NewDomain({ web3 }) {
 
   const [typedName, setTypedName] = useState("");
 

@@ -5,8 +5,8 @@
 }
 
 .app {
-  min-height: 100vh;
-  min-width: 100vw;
+  height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   background: rgb(0,0,0);
@@ -204,14 +204,6 @@ label {
   height: 100%;
 }
 
-.bg-animation {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
 #stars {
   width: 1px;
   height: 1px;
@@ -347,8 +339,7 @@ label {
 
 .domains-list-container {
   z-index: 100;
-  padding: 50px;
-  width: 50vw;
+  width: 50%;
 }
 
 .domains-list-button:hover {
@@ -401,6 +392,8 @@ label {
 
 .Main-Page-Container {
   display: flex;
+  flex-direction: row;
+  width: 100vw;
 }
 
 .Explore-Domains-Container {
@@ -441,4 +434,42 @@ label {
   top: 35%;
   right: 60%;
   color: black;
+}
+
+.lock-ens-container {
+  z-index: 100;
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lock-ens-title {
+  font-size: 3rem;
+  color: white;
+  font: sans-serif;
+}
+
+.lock-ens-name {
+  font-size: 2.5rem;
+  margin-top: 100px;
+  color: white;
+  font: sans-serif;
+}
+
+.lock-ens-button {
+  margin-top: 75px;
+  background-color: white;
+  color: black;
+  font-size: 2rem;
+  font: sans-serif;
+  border-radius: 14px;
+  border: none;
+  padding-left: 30px;
+  padding-right: 30px;
+  cursor: pointer;
+}
+
+.lock-ens-button:hover {
+  transform: scale(1.25);
 }

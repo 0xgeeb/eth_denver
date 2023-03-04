@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react"
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom"
 import { InjectedConnector } from "@web3-react/injected-connector";
 import { useWeb3React } from "@web3-react/core"
-import NewDomains from "./NewDomains.jsx"
-import Domains from "./Domains.jsx"
-import Subdomains from "./Subdomains.jsx"
-import DomainsList from "./DomainsList.jsx"
+import NewDomain from "./NewDomain.jsx"
 import MainPage from "./MainPage.jsx";
+import LockENS from "./LockENS.jsx";
 
 export default function App() {
 
@@ -89,9 +87,10 @@ export default function App() {
     <Router>
       <div className="app">
         <div className="header">
-          <a href="/" className="header-title-anchor"><h1 className="header-title">ens subdomain infra</h1></a>
+          <a href="/" className="header-title-anchor"><h1 className="header-title">new dot eth</h1></a>
           <div className="account-info-div">
-            <a href="/newdomains"><button className="header-button">new domains</button></a>
+            <a href="/lockens"><button className="header-button">lock ens</button></a>
+            <a href="/newdomain"><button className="header-button">new domain</button></a>
             <a href="/domains"><button className="header-button">domains</button></a>
             <button className="header-button-connect" onClick={() => clickButton()}>
               {renderButton()}
@@ -105,8 +104,9 @@ export default function App() {
           <div id="stars4"></div>
         </div>
         <Routes>
-          <Route path="/newdomains" element={<NewDomains web3={web3} />} />
+          <Route path="/newdomain" element={<NewDomain web3={web3} />} />
           <Route path="/domains" element={<MainPage web3={web3} />} />
+          <Route path="/lockens" element={<LockENS web3={web3} />} />
         </Routes>
       </div>
     </Router>

@@ -12,6 +12,11 @@ contract SubdomainManager is IERC1155Receiver {
   error NotOwner();
 
   mapping(uint256 => address) public ownerOf;
+  mapping(uint256 => string) public nameOf;
+
+  function getName(uint256 _tokenId) public view returns (string) {
+    return nameOf[_tokenId];
+  }
   
   function depositENS(uint256 _tokenId) public {
     ownerOf[_tokenId] = msg.sender;

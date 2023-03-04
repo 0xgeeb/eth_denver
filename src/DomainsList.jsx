@@ -72,7 +72,7 @@ import ExploreDomains from "./ExploreDomains";
               {ownedEns && (
                 <form>
                   <div className="ens-domains-container">
-                    {ownedEns.map((ens) => {
+                    {ownedEns.slice(0,7).map((ens) => {
                       return (
                         <div className="domains-name-container" key={ens}>
                         <input
