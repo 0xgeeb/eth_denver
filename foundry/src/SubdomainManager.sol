@@ -14,7 +14,7 @@ contract SubdomainManager is IERC1155Receiver {
   mapping(uint256 => address) public ownerOf;
   mapping(uint256 => string) public nameOf;
 
-  function getName(uint256 _tokenId) public view returns (string) {
+  function getName(uint256 _tokenId) public view returns (string memory) {
     return nameOf[_tokenId];
   }
   
