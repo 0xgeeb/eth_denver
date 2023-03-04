@@ -28,9 +28,6 @@ function Subdomains({ web3 }) {
   const [isEnsSelected, setIsEnsSelected] = useState(false);
   const [mintingPage, setMintingPage] = useState(false);
 
-  
-
-
   useEffect(() => {
     async function fetchEnsNames() {
       if (web3.active) {

@@ -4,6 +4,8 @@ import { InjectedConnector } from "@web3-react/injected-connector";
 import { useWeb3React } from "@web3-react/core"
 import NewDomains from "./NewDomains.jsx"
 import Domains from "./Domains.jsx"
+import Subdomains from "./Subdomains.jsx"
+import DomainsList from "./DomainsList.jsx"
 
 export default function App() {
 
@@ -103,7 +105,7 @@ export default function App() {
         </div>
         <Routes>
           <Route path="/newdomains" element={<NewDomains web3={web3} />} />
-          <Route path="/domains" element={<Domains web3={web3} />} />
+          <Route path="/domains" element={<DomainsList web3={web3} />} />
         </Routes>
       </div>
     </Router>
