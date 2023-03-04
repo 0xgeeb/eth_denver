@@ -102,10 +102,7 @@
   min-height: 60vh;
   font-size: 3rem;
   font-weight: 700;
-}
-
-.choose-doteth-section p {
-  padding: 20px;
+  z-index: 100;
 }
 
 input[type="radio"] {
