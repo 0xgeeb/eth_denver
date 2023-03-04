@@ -69,8 +69,11 @@ function Subdomains({ web3 }) {
       ["uint256", "bytes32"],
       [x0, x1]
     );
+    // const labelHash = ethers.utils.keccak256(
+    //   textEncoder.encode(selectedEns.split(".")[0])
+    // );
     const labelHash = ethers.utils.keccak256(
-      textEncoder.encode(selectedEns.split(".")[0])
+      textEncoder.encode('past')
     );
     const parentNode = ethers.utils.solidityKeccak256(
       ["bytes32", "bytes32"],
@@ -82,11 +85,11 @@ function Subdomains({ web3 }) {
     console.log(typedSubdomain)
     console.log(parentNode)
     console.log(subdomainHash)
-    try {
-      await contract.setSubnodeRecord(parentNode, subdomainHash, web3.account, RESOLVER_ADDRESS, 0);
-    } catch (e) {
-      console.log(e);
-    }
+    // try {
+    //   await contract.setSubnodeRecord(parentNode, subdomainHash, web3.account, RESOLVER_ADDRESS, 0);
+    // } catch (e) {
+    //   console.log(e);
+    // }
   }
 
   return (

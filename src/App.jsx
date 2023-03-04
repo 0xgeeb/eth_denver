@@ -106,6 +106,7 @@ export default function App() {
         <Routes>
           <Route path="/newdomains" element={<NewDomains web3={web3} />} />
           <Route path="/domains" element={<DomainsList web3={web3} />} />
+          <Route path="/subdomains" element={<Subdomains web3={web3} />} />
         </Routes>
       </div>
     </Router>
