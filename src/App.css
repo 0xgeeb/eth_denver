@@ -143,8 +143,9 @@ label {
 .ens-domains-container {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 80px;
+  margin-top: 40px;
   padding: 0 80px;
+  z-index: 100;
 }
 
 .ens-container {
@@ -342,13 +343,105 @@ label {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   text-transform: uppercase;
-}
-
-.domains-list-button + label {
   margin: 10px;
   padding: 10px;
+  width: 100%;
+}
+
+.domains-list-container {
+  z-index: 100;
+  padding: 50px;
+  width: 50vw;
+}
+
+.domains-list-button:hover {
+  transform: scale(1.2);
+  color: #fff;
+  outline: none;
+}
+
+.domains-name-container {
+  width: 100%;
+}
+
+.selected-domain-container{
+  z-index: 100;
+}
+
+.selected-domain-name{
   color: white;
+}
+
+.back-to-domains-button {
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-radius: 24px;
+  border-width: 2px;
+  border-color: rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
+  color: black;
+  font-weight: 700;
+  font-size: 18px;
+  margin-left: 36px;
+}
+
+.back-to-domains-button:hover {
+  transform: scale(1.05);
+}
+
+.selected-domain-container {
+  margin-top: 50px;
+  padding-left: 40px;
+}
+
+.selected-domain-name {
   font-size: 2rem;
-  transition: all 0.2s;
-  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.Main-Page-Container {
+  display: flex;
+}
+
+.Explore-Domains-Container {
+  z-index: 100;
+  color: white;
+  text-align: center;
+  width: 50%;
+  font-size: 3rem;
+  padding-top: 120px;
+  font-weight: bold;
+}
+
+.enter-subdomain-label {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333333;
+  font-weight: bold;
+}
+
+.subdomain-input {
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding: 20px;
+  font-size: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.input-subdomain-container{
+  display: inline-block;
+  width: 62%;
+}
+
+.absolute-ending {
+  position: absolute;
+  font-size: 1.4rem;
+  font-weight: bold;
+  top: 49%;
+  right: 60%;
+  color: black;
 }
