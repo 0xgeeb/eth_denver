@@ -54,17 +54,17 @@ import SelectedDomain from "./SelectedDomain";
       useEffect(() => {console.log(selectedEns);},[])
 
     async function handleSelectEns(e) {
-        setSelectedEns(e.target.value);
-        setIsEnsSelected(true);
-        setSelectedDomain(e.target.value);
-        setOwnedEns([e.target.value]);
+      e.preventDefault();
+      setSelectedEns(e.target.value);
+      setIsEnsSelected(true);
+      setSelectedDomain(e.target.value);
       }
   
       return (
         <div className="domains-list-container">
           {isEnsSelected ? (
             <div>
-              <button onClick={() => setIsEnsSelected(false)}>Back to Domains</button>
+              <button onClick={() => setIsEnsSelected(false)} className="back-to-domains-button">Back Home</button>
               <SelectedDomain name={selectedDomain} />
             </div>
           ) : (
@@ -76,17 +76,17 @@ import SelectedDomain from "./SelectedDomain";
                     {ownedEns.map((ens) => {
                       return (
                         <div key={ens}>
-                          <input
-                            type="radio"
-                            id={ens}
-                            name="ens_option"
-                            value={ens}
-                            className="domains-list-button"
-                            onClick={(e) => handleSelectEns(e)}
-                          />
-                          <label className="domains-list-button" htmlFor={ens}>
-                            {ens}
-                          </label>
+                        <input
+                          type="radio"
+                          id={ens}
+                          name="ens_option"
+                          value={ens}
+                          className="domains-list-button"
+                          onClick={(e) => handleSelectEns(e)}
+                        />
+                        <label className="domains-list-button" htmlFor={ens}>
+                          {ens}
+                        </label>
                         </div>
                       );
                     })}
