@@ -6,7 +6,7 @@ import { InjectedConnector } from "@web3-react/injected-connector";
 import { useWeb3React } from "@web3-react/core";
 import { Network, Alchemy } from "alchemy-sdk";
 import convertToParentNode from "./utils/utils";
-import SelectedDomain from "./SelectedDomain";
+import SelectedDomainLeft from "./SelectedDomainLeft";
 import ExploreDomains from "./ExploreDomains";
 
 
@@ -64,7 +64,7 @@ import ExploreDomains from "./ExploreDomains";
           {isEnsSelected ? (
             <div>
               <button onClick={() => setIsEnsSelected(false)} className="back-to-domains-button">Back To Domains List</button>
-              <SelectedDomain web3={web3} name={selectedDomain} />
+              <SelectedDomainLeft web3={web3} name={selectedDomain} />
             </div>
           ) : (
             <div>
