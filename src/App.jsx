@@ -7,6 +7,7 @@ import Domains from "./Domains.jsx"
 import Subdomains from "./Subdomains.jsx"
 import DomainsList from "./DomainsList.jsx"
 import MainPage from "./MainPage.jsx";
+import HomePage from "./HomePage.jsx";
 
 export default function App() {
 
@@ -89,10 +90,8 @@ export default function App() {
     <Router>
       <div className="app">
         <div className="header">
-          <a href="/" className="header-title-anchor"><h1 className="header-title">ens subdomain infra</h1></a>
+          <a href="/" className="header-title-anchor"><h1 className="header-title">New Dot Eth</h1></a>
           <div className="account-info-div">
-            <a href="/newdomains"><button className="header-button">new domains</button></a>
-            <a href="/domains"><button className="header-button">domains</button></a>
             <button className="header-button-connect" onClick={() => clickButton()}>
               {renderButton()}
             </button>
@@ -105,7 +104,7 @@ export default function App() {
           <div id="stars4"></div>
         </div>
         <Routes>
-          <Route path="/newdomains" element={<NewDomains web3={web3} />} />
+          <Route path="/" element={<HomePage web3={web3} />} />
           <Route path="/domains" element={<MainPage web3={web3} />} />
         </Routes>
       </div>
