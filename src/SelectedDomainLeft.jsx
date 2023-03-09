@@ -9,12 +9,20 @@ const textEncoder = new TextEncoder();
 const RESOLVER_ADDRESS = constants.address.resolver;
 const REGISTRY_ABI = constants.abi.registryWithFallback;
 const REGISTRY_ADDRESS = constants.address.registryWithFallback;
+const MANAGER_ADDRESS = constants.address.manager;
+const MANAGER_ABI = constants.abi.manager;
+const NAME_WRAPPER_ADDRESS = constants.address.nameWrapper;
+const NAME_WRAPPER_ABI = constants.abi.nameWrapper;
+const ENS_ABI_MAIN = constants.abi.base;
+const ENS_ADDRESS = constants.address.base;
 
 
-export default function SelectedDomain({ web3, name }) {
+export default function SelectedDomain({ web3, name, ensObject }) {
   const [subdomain, setSubdomain] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loadingSub, setLoadingSub] = useState(false);
+  const [loadingExplore, setLoadingExplore] = useState(false);
   const [mintPage, setMintPage] = useState(false);
+  const [sendToExplorePage, setSendToExplorePage] = useState(false);
 
   const handleKeyDown = (event) => {
     if(event.key === 'Enter') {
@@ -24,7 +32,7 @@ export default function SelectedDomain({ web3, name }) {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    setLoading(true);
+    setLoadingSub(true);
     const signer = web3.library.getSigner();
     const contract = new ethers.Contract(
       REGISTRY_ADDRESS,
@@ -35,16 +43,67 @@ export default function SelectedDomain({ web3, name }) {
     const subdomainHash = ethers.utils.keccak256(
       textEncoder.encode(subdomain)
     );
-    console.log("subdomain is ", subdomain)
-    console.log("parentnode is ",parentNode)
-    console.log("subdomainhash is ",subdomainHash)
     try {
-       await contract.setSubnodeRecord(parentNode, subdomainHash, web3.account, RESOLVER_ADDRESS, 0);
+       const tx = await contract.setSubnodeRecord(parentNode, subdomainHash, web3.account, RESOLVER_ADDRESS, 0);
+       await tx.wait()
      } catch (e) {
        console.log(e);
      }
-     setLoading(false);
+     setLoadingSub(false);
      setMintPage(true);
+  }
+
+  async function handleSendToExploreContract(e) {
+    e.preventDefault();
+    setLoadingExplore(true);
+    const signer = web3.library.getSigner();
+    const address = await signer.getAddress();
+    let tokenId;
+    const label = name.split(".")[0]
+    for (let i = 0; i < ensObject.length; i++) {
+      if (ensObject[i].name === name) {
+         tokenId = ensObject[i].tokenId;
+      }
+    }
+    const contractRegistrar = new ethers.Contract(
+      ENS_ADDRESS,
+      ENS_ABI_MAIN,
+      signer
+    );
+    console.log(tokenId);
+    try {
+      console.log("Approving Token");
+      const tx = await contractRegistrar.approve(NAME_WRAPPER_ADDRESS, tokenId);
+      await tx.wait();
+    } catch (e) {
+      console.log(e);
+    }
+    const nameWrapperContract = new ethers.Contract(
+      NAME_WRAPPER_ADDRESS,
+      NAME_WRAPPER_ABI,
+      signer
+    )
+    console.log(label,address,0, RESOLVER_ADDRESS);
+    try {
+      console.log("Wrapping Token");
+      const tx = await nameWrapperContract.wrapETH2LD(label,address,0, RESOLVER_ADDRESS)
+      await tx.wait()
+    } catch (e) {
+      console.log(e);
+    }
+    // const managerContract = new ethers.Contract(
+    //   MANAGER_ADDRESS,
+    //   MANAGER_ABI,
+    //   signer
+    // );
+    // try {
+    //   const tx = await managerContract.depositENS(tokenId.toString())
+    //   await tx.wait()    
+    // } catch (e) {
+    //   console.log(e);
+    // }
+    setLoadingExplore(false);
+    setSendToExplorePage(true);
   }
 
   return (
@@ -63,7 +122,7 @@ export default function SelectedDomain({ web3, name }) {
             onChange={(e) => setSubdomain(e.target.value)}
           />
         </div>
-        {loading && (
+        {loadingSub && (
           <>
             <div className="loading-spinner">
               <FaSpinner className="spinner" />
@@ -76,6 +135,19 @@ export default function SelectedDomain({ web3, name }) {
           </div>
         )}
       </form>
+      <button onClick={(e) => handleSendToExploreContract(e)} className="send-to-explore-contract-button">Wrap & Send {name} to Explore Domains Contract</button>
+      {loadingExplore && (
+          <>
+            <div className="loading-spinner">
+              <FaSpinner className="spinner" />
+            </div>
+          </>
+        )}
+      {sendToExplorePage && (
+        <div className="mint-success-container">
+          <h1 className="mint-success">You successfully sent {name} to the explore contract, see it on the right side</h1>
+        </div>
+        )}
   </div>
   );
 }

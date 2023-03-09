@@ -5,7 +5,7 @@ const constants = {
     nameWrapper: "0x060f1546642E67c485D56248201feA2f9AB1803C",
     resolver: "0x19c2d5D0f035563344dBB7bE5fD09c8dad62b001",
     registryWithFallback: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
-    manager: "0xe42b604cc33ab9356673207a36d2cff1b3e5d8c3",
+    manager: "0xe42B604cc33Ab9356673207A36d2CFF1b3E5D8C3",
   },
   abi: {
     manager: [

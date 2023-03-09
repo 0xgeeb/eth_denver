@@ -364,12 +364,9 @@ label {
   width: 100%;
 }
 
-.selected-domain-container{
-  z-index: 100;
-}
-
 .selected-domain-name{
   color: white;
+  margin-top: 20px;
 }
 
 .back-to-domains-button {
@@ -386,6 +383,7 @@ label {
   font-weight: 700;
   font-size: 18px;
   margin-left: 36px;
+  margin-bottom: 5px;
 }
 
 .back-to-domains-button:hover {
@@ -393,8 +391,11 @@ label {
 }
 
 .selected-domain-container {
-  margin-top: 50px;
-  padding-left: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
 }
 
 .selected-domain-name {
@@ -519,4 +520,24 @@ img {
 .header-button-main-page:hover {
   transform: scale(1.25);
   z-index: 100;
+}
+
+.send-to-explore-contract-button {
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-radius: 24px;
+  border-width: 2px;
+  border-color: rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.send-to-explore-contract-button:hover {
+  transform: scale(1.05);
 }

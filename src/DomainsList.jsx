@@ -22,6 +22,8 @@ import ExploreDomains from "./ExploreDomains";
   const ENS_ADDRESS = constants.address.base;
   const NAME_WRAPPER_ADDRESS = constants.address.nameWrapper;
   const NAME_WRAPPER_ABI = constants.abi.nameWrapper;
+  const REGISTRY_ABI = constants.abi.registryWithFallback;
+  const REGISTRY_ADDRESS = constants.address.registryWithFallback;
 
   function DomainsList({ web3 }) {
     const [ownedEns, setOwnedEns] = useState(null);
@@ -39,8 +41,10 @@ import ExploreDomains from "./ExploreDomains";
                 nftsForOwner.ownedNfts[i].contract.address.toLowerCase() ===
                 ENS_ADDRESS.toLowerCase()
               ) {
-                const split = nftsForOwner.ownedNfts[i].description.split(",");
-                ensArray.push(split[0]);
+               
+                const tokenId = nftsForOwner.ownedNfts[i].tokenId
+                const name = nftsForOwner.ownedNfts[i].title
+                ensArray.push({name, tokenId})
               }
             }
             setOwnedEns(ensArray);
@@ -50,21 +54,20 @@ import ExploreDomains from "./ExploreDomains";
         fetchEnsNames();
       }, [web3.active]);
 
-      useEffect(() => {console.log(selectedEns);},[])
-
     async function handleSelectEns(e) {
       e.preventDefault();
       setSelectedEns(e.target.value);
       setIsEnsSelected(true);
       setSelectedDomain(e.target.value);
-      }
-  
+    }
+
       return (
         <div className="domains-list-container">
           {isEnsSelected ? (
             <div>
               <button onClick={() => setIsEnsSelected(false)} className="back-to-domains-button">Back To Domains List</button>
-              <SelectedDomainLeft web3={web3} name={selectedDomain} />
+              <hr />
+              <SelectedDomainLeft web3={web3} name={selectedDomain} ensObject={ownedEns} />
             </div>
           ) : (
             <div>
@@ -74,17 +77,17 @@ import ExploreDomains from "./ExploreDomains";
                   <div className="ens-domains-container">
                     {ownedEns.map((ens) => {
                       return (
-                        <div className="domains-name-container" key={ens}>
+                        <div className="domains-name-container" key={ens.name}>
                         <input
                           type="radio"
-                          id={ens}
+                          id={ens.name}
                           name="ens_option"
-                          value={ens}
+                          value={ens.name}
                           className="domains-list-button"
                           onClick={(e) => handleSelectEns(e)}
                         />
-                        <label className="domains-list-button" htmlFor={ens}>
-                          {ens}
+                        <label className="domains-list-button" htmlFor={ens.name}>
+                          {ens.name}
                         </label>
                         </div>
                       );

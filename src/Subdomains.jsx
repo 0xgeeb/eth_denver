@@ -79,9 +79,6 @@ function Subdomains({ web3 }) {
     const subdomainHash = ethers.utils.keccak256(
       textEncoder.encode(typedSubdomain)
     );
-    console.log(typedSubdomain)
-    console.log(parentNode)
-    console.log(subdomainHash)
     try {
       await contract.setSubnodeRecord(parentNode, subdomainHash, web3.account, RESOLVER_ADDRESS, 0);
     } catch (e) {
