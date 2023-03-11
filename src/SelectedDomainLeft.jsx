@@ -70,9 +70,7 @@ export default function SelectedDomain({ web3, name, ensObject }) {
       ENS_ABI_MAIN,
       signer
     );
-    console.log(tokenId);
     try {
-      console.log("Approving Token");
       const tx = await contractRegistrar.approve(NAME_WRAPPER_ADDRESS, tokenId);
       await tx.wait();
     } catch (e) {
@@ -83,25 +81,48 @@ export default function SelectedDomain({ web3, name, ensObject }) {
       NAME_WRAPPER_ABI,
       signer
     )
-    console.log(label,address,0, RESOLVER_ADDRESS);
+    let newTokenId;
+    const promise = new Promise((resolve) => {
+      nameWrapperContract.on("TransferSingle", (index_topic_1, from, to, id, value, event) => {
+        newTokenId = id;
+        resolve(newTokenId);
+      });
+    });
     try {
-      console.log("Wrapping Token");
-      const tx = await nameWrapperContract.wrapETH2LD(label,address,0, RESOLVER_ADDRESS)
-      await tx.wait()
+      const tx2 = await nameWrapperContract.wrapETH2LD(label,address,0, RESOLVER_ADDRESS)
+      await tx2.wait()
     } catch (e) {
       console.log(e);
     }
-    // const managerContract = new ethers.Contract(
-    //   MANAGER_ADDRESS,
-    //   MANAGER_ABI,
-    //   signer
-    // );
-    // try {
-    //   const tx = await managerContract.depositENS(tokenId.toString())
-    //   await tx.wait()    
-    // } catch (e) {
-    //   console.log(e);
-    // }
+    const tokenID = await promise;
+    console.log("New Token Id is:", newTokenId);
+    console.log("Name is:", name);
+    let isManagerContractApproved
+    try {
+      isManagerContractApproved = await nameWrapperContract.isApprovedForAll(address, MANAGER_ADDRESS);
+    } catch (e) {
+      console.log(e);
+    }
+    console.log(isManagerContractApproved);
+    if (!isManagerContractApproved) {
+      try {
+        const tx3 = await nameWrapperContract.setApprovalForAll(MANAGER_ADDRESS, true);
+        tx3.wait();
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    const managerContract = new ethers.Contract(
+      MANAGER_ADDRESS,
+      MANAGER_ABI,
+      signer
+    );
+    try {
+      const tx = await managerContract.depositENS(tokenID, name)
+      await tx.wait()    
+    } catch (e) {
+      console.log(e);
+    }
     setLoadingExplore(false);
     setSendToExplorePage(true);
   }
@@ -110,14 +131,14 @@ export default function SelectedDomain({ web3, name, ensObject }) {
   <div className='selected-domain-container'>
     <h1 className='selected-domain-name'>Selected Domain: {name}</h1>
     <form>
-        <label className="enter-subdomain-label" htmlFor="subdomain-input">Mint Subdomain:</label>
+        <label className="enter-subdomain-label" htmlFor="subdomain-input" onClick={(e) => handleSubmit(e)}>Mint Subdomain:</label>
         <div className="input-subdomain-container">
-          <p className="absolute-ending">.{name}</p>
           <input
             className="subdomain-input"
             type="text"
             id="subdomain-input"
             value={subdomain}
+            placeholder={`_______.${name}`}
             onKeyDown={handleKeyDown}
             onChange={(e) => setSubdomain(e.target.value)}
           />
@@ -145,7 +166,7 @@ export default function SelectedDomain({ web3, name, ensObject }) {
         )}
       {sendToExplorePage && (
         <div className="mint-success-container">
-          <h1 className="mint-success">You successfully sent {name} to the explore contract, see it on the right side</h1>
+          <h1 className="mint-success">You successfully sent {name} to the explore contract, refresh to see it on the explore side</h1>
         </div>
         )}
   </div>

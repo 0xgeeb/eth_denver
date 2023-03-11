@@ -8,30 +8,33 @@ import "ens-contracts/wrapper/NameWrapper.sol";
 
 contract SubdomainManager is IERC1155Receiver {
     NameWrapper nameWrapperContract;
+    uint256 public internalId = 0;
 
     error NotOwner();
+    error NotAllowedToTransfer();
 
     constructor(address nameWrapperAddress) {
         nameWrapperContract = NameWrapper(nameWrapperAddress);
     }
 
-    struct Domain {
-        uint256 nameWrapperTokenId;
+    struct DomainCheck {
+        uint256 internalId;
         address owner;
+    }
+
+    struct DomainInfo {
+        string name;
+        uint256 nameWrapperTokenId;
         bool inThisContract;
     }
 
-    mapping(uint256 => Domain) public nameWrapperTokenIdToDomain;
-    Domain[] public domainsArray;
+    mapping(uint256 => DomainCheck) public tokenIdToDomainCheck;
+    DomainInfo[] public domainsInfoArray;
 
-    function depositENS(uint256 _tokenId) public {
-        nameWrapperTokenIdToDomain[_tokenId] = Domain(
-            _tokenId,
-            msg.sender,
-            true
-        );
+    function depositENS(uint256 _tokenId, string calldata _name) public {
+        tokenIdToDomainCheck[_tokenId] = DomainCheck(internalId, msg.sender);
+        domainsInfoArray.push(DomainInfo(_name, _tokenId, true));
         internalId++;
-        domainsArray.push(Domain(_tokenId, msg.sender, true));
         nameWrapperContract.safeTransferFrom(
             msg.sender,
             address(this),
@@ -42,9 +45,10 @@ contract SubdomainManager is IERC1155Receiver {
     }
 
     function withdrawENS(uint256 _tokenId) public {
-        if (nameWrapperTokenIdToDomain[_tokenId].owner != msg.sender)
+        if (tokenIdToDomainCheck[_tokenId].owner != msg.sender)
             revert NotOwner();
-        nameWrapperTokenIdToDomain[_tokenId].inThisContract = false;
+        uint256 _internalId = tokenIdToDomainCheck[_tokenId].internalId;
+        domainsInfoArray[_internalId].inThisContract = false;
         nameWrapperContract.safeTransferFrom(
             address(this),
             msg.sender,
@@ -55,7 +59,7 @@ contract SubdomainManager is IERC1155Receiver {
     }
 
     function mintSubdomain(bytes32 _parentNode, string memory _label) public {
-        nameWrapperContract.setSubnodeOwner(
+        bytes32 subdomainNode = nameWrapperContract.setSubnodeOwner(
             _parentNode,
             _label,
             msg.sender,
@@ -84,13 +88,9 @@ contract SubdomainManager is IERC1155Receiver {
         return this.onERC1155BatchReceived.selector;
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override
-        returns (bool)
-    {
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view virtual override returns (bool) {
         return interfaceId == type(IERC165).interfaceId;
     }
 }

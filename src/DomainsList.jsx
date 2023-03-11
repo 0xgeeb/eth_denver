@@ -41,7 +41,6 @@ import ExploreDomains from "./ExploreDomains";
                 nftsForOwner.ownedNfts[i].contract.address.toLowerCase() ===
                 ENS_ADDRESS.toLowerCase()
               ) {
-               
                 const tokenId = nftsForOwner.ownedNfts[i].tokenId
                 const name = nftsForOwner.ownedNfts[i].title
                 ensArray.push({name, tokenId})
