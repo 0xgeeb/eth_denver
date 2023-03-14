@@ -3,7 +3,6 @@ import "./App.css";
 import constants from "./constants/constants";
 import {ethers} from "ethers";
 import convertToParentNode from "./utils/utils";
-import {FaSpinner} from "react-icons/fa"
 
 const textEncoder = new TextEncoder();
 const RESOLVER_ADDRESS = constants.address.resolver;
@@ -56,6 +55,7 @@ export default function SelectedDomain({ web3, name, ensObject }) {
   async function handleSendToExploreContract(e) {
     e.preventDefault();
     setLoadingExplore(true);
+    console.log(loadingExplore);
     const signer = web3.library.getSigner();
     const address = await signer.getAddress();
     let tokenId;
@@ -95,15 +95,12 @@ export default function SelectedDomain({ web3, name, ensObject }) {
       console.log(e);
     }
     const tokenID = await promise;
-    console.log("New Token Id is:", newTokenId);
-    console.log("Name is:", name);
     let isManagerContractApproved
     try {
       isManagerContractApproved = await nameWrapperContract.isApprovedForAll(address, MANAGER_ADDRESS);
     } catch (e) {
       console.log(e);
     }
-    console.log(isManagerContractApproved);
     if (!isManagerContractApproved) {
       try {
         const tx3 = await nameWrapperContract.setApprovalForAll(MANAGER_ADDRESS, true);
@@ -124,6 +121,7 @@ export default function SelectedDomain({ web3, name, ensObject }) {
       console.log(e);
     }
     setLoadingExplore(false);
+    console.log(loadingExplore);
     setSendToExplorePage(true);
   }
 
@@ -131,6 +129,7 @@ export default function SelectedDomain({ web3, name, ensObject }) {
   <div className='selected-domain-container'>
     <h1 className='selected-domain-name'>Selected Domain: {name}</h1>
     <form>
+      <div className="label-input-container">
         <label className="enter-subdomain-label" htmlFor="subdomain-input" onClick={(e) => handleSubmit(e)}>Mint Subdomain:</label>
         <div className="input-subdomain-container">
           <input
@@ -143,27 +142,32 @@ export default function SelectedDomain({ web3, name, ensObject }) {
             onChange={(e) => setSubdomain(e.target.value)}
           />
         </div>
+      </div>
         {loadingSub && (
-          <>
-            <div className="loading-spinner">
-              <FaSpinner className="spinner" />
-            </div>
-          </>
+          <div className="loading-spinner">
+            <span className="spinner" style={{display: 'inherit'}}>
+              <span style={{display: 'inline-block', backgroundColor: 'white', width: '30px', height: '30px', margin: '2px', borderRadius: '100%', animation: '0.7s linear 0s infinite normal both running react-spinners-BeatLoader-beat'}}></span>
+              <span style={{display: 'inline-block', backgroundColor: 'white', width: '30px', height: '30px', margin: '2px', borderRadius: '100%', animation: '0.7s linear 0.35s infinite normal both running react-spinners-BeatLoader-beat'}}></span>
+              <span style={{display: 'inline-block', backgroundColor: 'white', width: '30px', height: '30px', margin: '2px', borderRadius: '100%', animation: '0.7s linear 0s infinite normal both running react-spinners-BeatLoader-beat'}}></span>
+            </span>
+          </div>
         )}
         {mintPage && (
           <div className="mint-success-container">
-          <h1 className="mint-success">You successfully minted {subdomain}.{name}</h1>
+            <h1 className="mint-success">You successfully minted {subdomain}.{name}</h1>
           </div>
         )}
       </form>
       <button onClick={(e) => handleSendToExploreContract(e)} className="send-to-explore-contract-button">Wrap & Send {name} to Explore Domains Contract</button>
       {loadingExplore && (
-          <>
-            <div className="loading-spinner">
-              <FaSpinner className="spinner" />
-            </div>
-          </>
-        )}
+    <div className="loading-spinner">
+        <span className="spinner" style={{display: 'inherit'}}>
+            <span style={{display: 'inline-block', backgroundColor: 'white', width: '30px', height: '30px', margin: '2px', borderRadius: '100%', animation: '0.7s linear 0s infinite normal both running react-spinners-BeatLoader-beat'}}></span>
+            <span style={{display: 'inline-block', backgroundColor: 'white', width: '30px', height: '30px', margin: '2px', borderRadius: '100%', animation: '0.7s linear 0.35s infinite normal both running react-spinners-BeatLoader-beat'}}></span>
+            <span style={{display: 'inline-block', backgroundColor: 'white', width: '30px', height: '30px', margin: '2px', borderRadius: '100%', animation: '0.7s linear 0s infinite normal both running react-spinners-BeatLoader-beat'}}></span>
+        </span>
+    </div>
+)}
       {sendToExplorePage && (
         <div className="mint-success-container">
           <h1 className="mint-success">You successfully sent {name} to the explore contract, refresh to see it on the explore side</h1>

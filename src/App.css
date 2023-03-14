@@ -335,6 +335,21 @@ label {
   }
 }
 
+@keyframes react-spinners-BeatLoader-beat {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .domains-list-button {
   background-color: transparent;
   border: none;
@@ -383,7 +398,7 @@ label {
   font-weight: 700;
   font-size: 18px;
   margin-left: 36px;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
 }
 
 .back-to-domains-button:hover {
@@ -418,10 +433,13 @@ label {
 }
 
 .enter-subdomain-label {
+  padding: 20px 10px;
+  margin-bottom: 0;
   font-size: 1.5rem;
-  margin-bottom: 10px;
   color: #333333;
   font-weight: bold;
+  flex-basis: 33.333%;
+  text-align: center;
 }
 
 .subdomain-input {
@@ -432,11 +450,13 @@ label {
   padding-left: 20px;
   font-size: 1.5rem;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .input-subdomain-container{
-  display: inline-block;
-  width: 26.73vw;
+  flex-basis: 66.666%;
+  display: flex;
+  align-items: center;
 }
 
 .absolute-ending {
@@ -463,11 +483,7 @@ label {
   align-items: center;
   width: 50vw;
   padding: 25px;
-}
-
-.spinner {
-  color: white;
-  font-size: 50px;
+  z-index: 100;
 }
 
 .mint-success {
@@ -543,5 +559,19 @@ img {
   transform: scale(1.05);
 }
 
-.label-button {
+.label-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+form {
+  width: 100%;
+}
+
+@media (max-width:1518px){
+  .subdomain-input {
+    height: 98px;
+  }
+
 }

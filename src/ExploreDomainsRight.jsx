@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import constants from "./constants/constants";
 import {ethers} from "ethers";
-import convertToParentNode from "./utils/utils";
-import {FaSpinner} from "react-icons/fa"
 
 const textEncoder = new TextEncoder();
 const RESOLVER_ADDRESS = constants.address.resolver;
@@ -77,6 +75,7 @@ export default function ExploreDomainsRight({ web3, name, tokenId }) {
   <div className='selected-domain-container'>
     <h1 className='selected-domain-name'>Selected Domain: {name}</h1>
     <form>
+      <div className="label-input-container">
         <label className="enter-subdomain-label" htmlFor="subdomain-input" onClick={(e) => handleSubmit(e)}>Mint Subdomain:</label>
         <div className="input-subdomain-container">
           <input
@@ -89,12 +88,15 @@ export default function ExploreDomainsRight({ web3, name, tokenId }) {
             onChange={(e) => setSubdomain(e.target.value)}
           />
         </div>
+      </div>
         {loading && (
-          <>
-            <div className="loading-spinner">
-              <FaSpinner className="spinner" />
-            </div>
-          </>
+          <div className="loading-spinner">
+            <span className="spinner" style={{display: 'inherit'}}>
+              <span style={{display: 'inline-block', backgroundColor: 'white', width: '30px', height: '30px', margin: '2px', borderRadius: '100%', animation: '0.7s linear 0s infinite normal both running react-spinners-BeatLoader-beat'}}></span>
+              <span style={{display: 'inline-block', backgroundColor: 'white', width: '30px', height: '30px', margin: '2px', borderRadius: '100%', animation: '0.7s linear 0.35s infinite normal both running react-spinners-BeatLoader-beat'}}></span>
+              <span style={{display: 'inline-block', backgroundColor: 'white', width: '30px', height: '30px', margin: '2px', borderRadius: '100%', animation: '0.7s linear 0s infinite normal both running react-spinners-BeatLoader-beat'}}></span>
+            </span>
+          </div>
         )}
         {mintPage && (
           <div className="mint-success-container">
@@ -102,13 +104,15 @@ export default function ExploreDomainsRight({ web3, name, tokenId }) {
           </div>
         )}
       </form>
-      <button onClick={(e) => handleWithdrawFromExploreContract(e)} className="send-to-explore-contract-button">Withdraw {name} from Explore Domains Contract</button>
+      <button onClick={(e) => handleWithdrawFromExploreContract(e)} className="send-to-explore-contract-button">Withdraw {name} from Explore Domains Contract if Owner</button>
       {loadingExplore && (
-          <>
-            <div className="loading-spinner">
-              <FaSpinner className="spinner" />
-            </div>
-          </>
+        <div className="loading-spinner">
+          <span className="spinner" style={{display: 'inherit'}}>
+            <span style={{display: 'inline-block', backgroundColor: 'white', width: '30px', height: '30px', margin: '2px', borderRadius: '100%', animation: '0.7s linear 0s infinite normal both running react-spinners-BeatLoader-beat'}}></span>
+            <span style={{display: 'inline-block', backgroundColor: 'white', width: '30px', height: '30px', margin: '2px', borderRadius: '100%', animation: '0.7s linear 0.35s infinite normal both running react-spinners-BeatLoader-beat'}}></span>
+            <span style={{display: 'inline-block', backgroundColor: 'white', width: '30px', height: '30px', margin: '2px', borderRadius: '100%', animation: '0.7s linear 0s infinite normal both running react-spinners-BeatLoader-beat'}}></span>
+          </span>
+        </div>
         )}
       {sendToExplorePage && (
         <div className="mint-success-container">
