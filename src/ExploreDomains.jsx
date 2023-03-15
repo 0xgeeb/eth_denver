@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { ethers } from "ethers"
 import constants from "./constants/constants";
 import ExploreDomainsRight from "./ExploreDomainsRight";
+import Modal from 'react-modal';
 
 
 const MANAGER_ADDRESS = constants.address.manager;
@@ -14,6 +15,7 @@ export default function ExploreDomains({ web3 }) {
   const [selectedDomain, setSelectedDomain] = useState(null);
   const [selectedEns, setSelectedEns] = useState(null);
   const [tokenId, setTokenId] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
     async function fetchEnsNames() {
@@ -48,11 +50,29 @@ export default function ExploreDomains({ web3 }) {
         setTokenId(ownedEns[i].nameWrapperTokenId.toString());
       }
     }
-    }
+ }
+
+function openModal() {
+  setModalIsOpen(true);
+}
+    
+function closeModal() {
+   setModalIsOpen(false); 
+ }
 
 
   return (
     <div className='domains-list-container'>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        className="modal-content"
+        overlayClassName="modal-overlay"
+      >
+        <h2 className='what-is-explore-heading'>What is the Explore Domains Contract?</h2>
+        <p className='what-is-explore-content'>The Explore Domains Contract encompasses wrapped ENS names that have been contributed by users. Anyone has the opportunity to obtain a complimentary subdomain from these available names.</p>
+        <button onClick={closeModal} className="modal-close-button">Close</button>
+      </Modal>
       {isEnsSelected ? (
             <div>
               <button onClick={() => setIsEnsSelected(false)} className="back-to-domains-button">Back To Explore List</button>
@@ -61,7 +81,7 @@ export default function ExploreDomains({ web3 }) {
             </div>
           ) : (
             <div>
-              <h1 className="domains-list-header">Explore Domains</h1>
+              <h1 className="domains-list-header">Explore Domains<span className="whats-this" onClick={openModal}>What's this</span></h1>
               {ownedEns && (
                 <form>
                   <div className="ens-domains-container">
@@ -89,4 +109,4 @@ export default function ExploreDomains({ web3 }) {
           )}
         </div>
   );
-                  }
+}

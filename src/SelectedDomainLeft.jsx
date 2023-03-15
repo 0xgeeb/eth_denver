@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./App.css";
 import constants from "./constants/constants";
 import {ethers} from "ethers";
@@ -22,6 +22,7 @@ export default function SelectedDomain({ web3, name, ensObject }) {
   const [loadingExplore, setLoadingExplore] = useState(false);
   const [mintPage, setMintPage] = useState(false);
   const [sendToExplorePage, setSendToExplorePage] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const handleKeyDown = (event) => {
     if(event.key === 'Enter') {
@@ -52,13 +53,17 @@ export default function SelectedDomain({ web3, name, ensObject }) {
      setMintPage(true);
   }
 
+  function updateProgress(value) {
+    setProgress((prevProgress) => prevProgress + value);
+  }
+
   async function handleSendToExploreContract(e) {
     e.preventDefault();
     setLoadingExplore(true);
-    console.log(loadingExplore);
     const signer = web3.library.getSigner();
     const address = await signer.getAddress();
     let tokenId;
+    console.log(tokenId);
     const label = name.split(".")[0]
     for (let i = 0; i < ensObject.length; i++) {
       if (ensObject[i].name === name) {
@@ -73,6 +78,7 @@ export default function SelectedDomain({ web3, name, ensObject }) {
     try {
       const tx = await contractRegistrar.approve(NAME_WRAPPER_ADDRESS, tokenId);
       await tx.wait();
+      updateProgress(1); 
     } catch (e) {
       console.log(e);
     }
@@ -91,6 +97,7 @@ export default function SelectedDomain({ web3, name, ensObject }) {
     try {
       const tx2 = await nameWrapperContract.wrapETH2LD(label,address,0, RESOLVER_ADDRESS)
       await tx2.wait()
+      updateProgress(1); 
     } catch (e) {
       console.log(e);
     }
@@ -104,7 +111,8 @@ export default function SelectedDomain({ web3, name, ensObject }) {
     if (!isManagerContractApproved) {
       try {
         const tx3 = await nameWrapperContract.setApprovalForAll(MANAGER_ADDRESS, true);
-        tx3.wait();
+        updateProgress(1); 
+        await tx3.wait();
       } catch (e) {
         console.log(e);
       }
@@ -115,8 +123,12 @@ export default function SelectedDomain({ web3, name, ensObject }) {
       signer
     );
     try {
-      const tx = await managerContract.depositENS(tokenID, name)
-      await tx.wait()    
+      const tx4 = await managerContract.depositENS(tokenID, name)
+      updateProgress(1); 
+      await tx4.wait();   
+      updateProgress(1); 
+      await new Promise((resolve) => setTimeout(resolve, 2000)); 
+
     } catch (e) {
       console.log(e);
     }
@@ -158,15 +170,18 @@ export default function SelectedDomain({ web3, name, ensObject }) {
           </div>
         )}
       </form>
+      <h2 className='selected-domain-or'>or</h2>
       <button onClick={(e) => handleSendToExploreContract(e)} className="send-to-explore-contract-button">Wrap & Send {name} to Explore Domains Contract</button>
       {loadingExplore && (
-    <div className="loading-spinner">
-        <span className="spinner" style={{display: 'inherit'}}>
-            <span style={{display: 'inline-block', backgroundColor: 'white', width: '30px', height: '30px', margin: '2px', borderRadius: '100%', animation: '0.7s linear 0s infinite normal both running react-spinners-BeatLoader-beat'}}></span>
-            <span style={{display: 'inline-block', backgroundColor: 'white', width: '30px', height: '30px', margin: '2px', borderRadius: '100%', animation: '0.7s linear 0.35s infinite normal both running react-spinners-BeatLoader-beat'}}></span>
-            <span style={{display: 'inline-block', backgroundColor: 'white', width: '30px', height: '30px', margin: '2px', borderRadius: '100%', animation: '0.7s linear 0s infinite normal both running react-spinners-BeatLoader-beat'}}></span>
-        </span>
-    </div>
+        <>
+          <h1 className="wrap-send-header">Wrap & Send Progress</h1>
+          <div className="loading-bar">
+            <div className={`loading-bar-section${progress >= 1 ? ' loading' : ''}`}>Approve Namewrapper</div>
+            <div className={`loading-bar-section${progress >= 2 ? ' loading' : ''}`}>Wrap Name</div>
+            <div className={`loading-bar-section${progress >= 3 ? ' loading' : ''}`}>Approve Explore Contract</div>
+            <div className={`loading-bar-section${progress >= 4 ? ' loading' : ''}`}>Deposit Name</div>
+          </div>
+        </>
 )}
       {sendToExplorePage && (
         <div className="mint-success-container">

@@ -1,12 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./App.css";
 import constants from "./constants/constants";
 import {ethers} from "ethers";
 
 const textEncoder = new TextEncoder();
-const RESOLVER_ADDRESS = constants.address.resolver;
-const REGISTRY_ABI = constants.abi.registryWithFallback;
-const REGISTRY_ADDRESS = constants.address.registryWithFallback;
 const MANAGER_ADDRESS = constants.address.manager;
 const MANAGER_ABI = constants.abi.manager;
 
@@ -47,7 +44,13 @@ export default function ExploreDomainsRight({ web3, name, tokenId }) {
         ["bytes32", "bytes32"],
         [eth, labelHash]
     );
-    await contract.mintSubdomain(parentNode, subdomain)
+    try {
+      const tx = await contract.mintSubdomain(parentNode, subdomain)
+      await tx.wait()
+    } catch (e) {
+      console.log(e);
+    }
+    
     setLoading(false);
     setMintPage(true);
   }
@@ -63,7 +66,7 @@ export default function ExploreDomainsRight({ web3, name, tokenId }) {
     );
     try {
       const tx = await managerContract.withdrawENS(tokenId)
-      tx.wait()
+      await tx.wait()
     } catch (e) {
       console.log(e);
     }
@@ -104,7 +107,8 @@ export default function ExploreDomainsRight({ web3, name, tokenId }) {
           </div>
         )}
       </form>
-      <button onClick={(e) => handleWithdrawFromExploreContract(e)} className="send-to-explore-contract-button">Withdraw {name} from Explore Domains Contract if Owner</button>
+      <h2 className='selected-domain-or'>or</h2>
+      <button onClick={(e) => handleWithdrawFromExploreContract(e)} className="send-to-explore-contract-button">Withdraw {name} from Explore Domains Contract if you're the Owner</button>
       {loadingExplore && (
         <div className="loading-spinner">
           <span className="spinner" style={{display: 'inherit'}}>

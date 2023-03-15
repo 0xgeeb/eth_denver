@@ -46,7 +46,9 @@ import ExploreDomains from "./ExploreDomains";
                 ensArray.push({name, tokenId})
               }
             }
-            setOwnedEns(ensArray);
+            let ownsEns
+            ensArray.length > 0 ? ownsEns = true : ownsEns = false
+            setOwnedEns({ensArray, ownsEns});
           }
         }
     
@@ -66,15 +68,15 @@ import ExploreDomains from "./ExploreDomains";
             <div>
               <button onClick={() => setIsEnsSelected(false)} className="back-to-domains-button">Back To Domains List</button>
               <hr />
-              <SelectedDomainLeft web3={web3} name={selectedDomain} ensObject={ownedEns} />
+              <SelectedDomainLeft web3={web3} name={selectedDomain} ensObject={ownedEns.ensArray} />
             </div>
           ) : (
             <div>
-              <h1 className="domains-list-header">Select a Domain</h1>
+              <h1 className="domains-list-header">Select a Domain You Own</h1>
               {ownedEns && (
                 <form>
                   <div className="ens-domains-container">
-                    {ownedEns.map((ens) => {
+                    {ownedEns.ownsEns ? ownedEns.ensArray.map((ens) => {
                       return (
                         <div className="domains-name-container" key={ens.name}>
                         <input
@@ -90,7 +92,7 @@ import ExploreDomains from "./ExploreDomains";
                         </label>
                         </div>
                       );
-                    })}
+                    }) : (<p className="domains-list-no-ens">You don't own any ENS Domains go to <a target="_blank" className="ens-domains-link" href="https://ens.domains/">ens.domains</a> to mint one</p>)}
                   </div>
                 </form>
               )}
