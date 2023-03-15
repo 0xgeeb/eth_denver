@@ -8,6 +8,7 @@ import Subdomains from "./Subdomains.jsx"
 import DomainsList from "./DomainsList.jsx"
 import MainPage from "./MainPage.jsx";
 import HomePage from "./HomePage.jsx";
+import logo from "./images/logo.png"
 
 export default function App() {
 
@@ -90,14 +91,17 @@ export default function App() {
     <Router>
       <div className="app">
         <div className="header">
-          <a href="/" className="header-title-anchor"><h1 className="header-title">New Dot Eth</h1></a>
+          <a href="/" className="header-title-anchor">
+            <h1 className="header-title">New Dot Eth</h1>
+            <img className="header-logo" src={logo} alt="logo" height="40" width="40"  />
+          </a>
           <div className="account-info-div">
             <button className="header-button-connect" onClick={() => clickButton()}>
               {renderButton()}
             </button>
           </div>
         </div>
-        <div class="bg-animation">
+        <div className="bg-animation">
           <div id="stars"></div>
           <div id="stars2"></div>
           <div id="stars3"></div>

@@ -5,18 +5,53 @@ const constants = {
     nameWrapper: "0x060f1546642E67c485D56248201feA2f9AB1803C",
     resolver: "0x19c2d5D0f035563344dBB7bE5fD09c8dad62b001",
     registryWithFallback: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
-    manager: "0xe42b604cc33ab9356673207a36d2cff1b3e5d8c3",
+    manager: "0xf7caa836d7f96f5cc4767fe59748035d768ae1a7",
   },
   abi: {
     manager: [
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "nameWrapperAddress",
+            type: "address",
+          },
+        ],
+        stateMutability: "nonpayable",
+        type: "constructor",
+      },
+      { inputs: [], name: "NotAllowedToTransfer", type: "error" },
       { inputs: [], name: "NotOwner", type: "error" },
       {
         inputs: [
           { internalType: "uint256", name: "_tokenId", type: "uint256" },
+          { internalType: "string", name: "_name", type: "string" },
         ],
         name: "depositENS",
         outputs: [],
         stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+        name: "domainsInfoArray",
+        outputs: [
+          { internalType: "string", name: "name", type: "string" },
+          {
+            internalType: "uint256",
+            name: "nameWrapperTokenId",
+            type: "uint256",
+          },
+          { internalType: "bool", name: "inThisContract", type: "bool" },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [],
+        name: "internalId",
+        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+        stateMutability: "view",
         type: "function",
       },
       {
@@ -56,18 +91,21 @@ const constants = {
         type: "function",
       },
       {
-        inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        name: "ownerOf",
-        outputs: [{ internalType: "address", name: "", type: "address" }],
-        stateMutability: "view",
-        type: "function",
-      },
-      {
         inputs: [
           { internalType: "bytes4", name: "interfaceId", type: "bytes4" },
         ],
         name: "supportsInterface",
         outputs: [{ internalType: "bool", name: "", type: "bool" }],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+        name: "tokenIdToDomainCheck",
+        outputs: [
+          { internalType: "uint256", name: "internalId", type: "uint256" },
+          { internalType: "address", name: "owner", type: "address" },
+        ],
         stateMutability: "view",
         type: "function",
       },

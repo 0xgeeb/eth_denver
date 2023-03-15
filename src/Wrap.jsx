@@ -80,7 +80,7 @@ import convertToParentNode from "./utils/utils";
       signer
     );
     const tx2 = await contractWrapper.wrapETH2LD(label, web3.account, 0, "0x19c2d5D0f035563344dBB7bE5fD09c8dad62b001");
-    await tx.wait();
+    await tx2.wait();
   }
   
   async function handleSubmit(e) {
