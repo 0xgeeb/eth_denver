@@ -12,6 +12,8 @@ contract SubdomainManager is IERC1155Receiver {
 
     error NotOwner();
     error NotAllowedToTransfer();
+    error PriceNotMet();
+    error TransferFailed();
 
     constructor(address nameWrapperAddress) {
         nameWrapperContract = NameWrapper(nameWrapperAddress);
@@ -20,20 +22,30 @@ contract SubdomainManager is IERC1155Receiver {
     struct DomainCheck {
         uint256 internalId;
         address owner;
+        uint256 price;
     }
 
     struct DomainInfo {
         string name;
         uint256 nameWrapperTokenId;
         bool inThisContract;
+        uint256 price;
     }
 
     mapping(uint256 => DomainCheck) public tokenIdToDomainCheck;
     DomainInfo[] public domainsInfoArray;
 
-    function depositENS(uint256 _tokenId, string calldata _name) public {
-        tokenIdToDomainCheck[_tokenId] = DomainCheck(internalId, msg.sender);
-        domainsInfoArray.push(DomainInfo(_name, _tokenId, true));
+    function depositENS(
+        uint256 _tokenId,
+        string calldata _name,
+        uint256 _price
+    ) public {
+        tokenIdToDomainCheck[_tokenId] = DomainCheck(
+            internalId,
+            msg.sender,
+            _price
+        );
+        domainsInfoArray.push(DomainInfo(_name, _tokenId, true, _price));
         internalId++;
         nameWrapperContract.safeTransferFrom(
             msg.sender,
@@ -58,7 +70,15 @@ contract SubdomainManager is IERC1155Receiver {
         );
     }
 
-    function mintSubdomain(bytes32 _parentNode, string memory _label) public {
+    function mintSubdomain(
+        uint256 _tokenId,
+        bytes32 _parentNode,
+        string memory _label
+    ) public payable {
+        DomainCheck memory check = tokenIdToDomainCheck[_tokenId];
+        if (msg.value < check.price) {
+            revert PriceNotMet();
+        }
         bytes32 subdomainNode = nameWrapperContract.setSubnodeOwner(
             _parentNode,
             _label,
@@ -66,6 +86,10 @@ contract SubdomainManager is IERC1155Receiver {
             0,
             1716641088
         );
+        (bool success, ) = (check.owner).call{value: msg.value}("");
+        if (!success) {
+            revert TransferFailed();
+        }
     }
 
     function onERC1155Received(

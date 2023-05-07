@@ -21,12 +21,14 @@ contract SubdomainManagerTest is Test, IERC1155Receiver {
     struct DomainCheck {
         uint256 internalId;
         address owner;
+        uint256 price;
     }
 
     struct DomainInfo {
         string name;
         uint256 nameWrapperTokenId;
         bool inThisContract;
+        uint256 price;
     }
 
     function setUp() public {
@@ -43,19 +45,22 @@ contract SubdomainManagerTest is Test, IERC1155Receiver {
         namewrapper.safeTransferFrom(geeb, address(this), pastTokenId, 1, "");
         namewrapper.ownerOf(pastTokenId);
         namewrapper.setApprovalForAll(address(subdomainmanager), true);
-        subdomainmanager.depositENS(pastTokenId, "Hi");
-        (uint256 internalId, address owner) = subdomainmanager
+        subdomainmanager.depositENS(pastTokenId, "Hi", 5);
+        (uint256 internalId, address owner, uint256 price) = subdomainmanager
             .tokenIdToDomainCheck(pastTokenId);
         assertEq(internalId, 0);
         assertEq(owner, address(this));
+        assertEq(price, 5);
         (
             string memory name,
             uint256 nameWrapperTokenId,
-            bool inThisContract
+            bool inThisContract,
+            uint256 price2
         ) = subdomainmanager.domainsInfoArray(0);
         assertEq(name, "Hi");
         assertEq(nameWrapperTokenId, pastTokenId);
         assertEq(inThisContract, true);
+        assertEq(price2, 5);
         address testAddy2 = namewrapper.ownerOf(pastTokenId);
         assertEq(testAddy2, address(subdomainmanager));
     }
@@ -63,7 +68,7 @@ contract SubdomainManagerTest is Test, IERC1155Receiver {
     function testWithdraw() public {
         testDeposit();
         subdomainmanager.withdrawENS(pastTokenId);
-        (, , bool inThisContract) = subdomainmanager.domainsInfoArray(0);
+        (, , bool inThisContract, ) = subdomainmanager.domainsInfoArray(0);
         assertEq(inThisContract, false);
         address testAddy2 = namewrapper.ownerOf(pastTokenId);
         assertEq(testAddy2, address(this));
@@ -72,7 +77,11 @@ contract SubdomainManagerTest is Test, IERC1155Receiver {
     function testMint() public {
         testDeposit();
         vm.prank(geeb);
-        subdomainmanager.mintSubdomain(pastParentNode, "thefinaltest");
+        subdomainmanager.mintSubdomain{value: 5}(
+            pastTokenId,
+            pastParentNode,
+            "thefinaltest"
+        );
         (address testAddy, , ) = namewrapper.getData(pastTokenId);
         assertEq(testAddy, address(subdomainmanager));
     }
