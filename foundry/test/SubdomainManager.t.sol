@@ -111,6 +111,4 @@ contract SubdomainManagerTest is Test, IERC1155Receiver {
     ) public view virtual override returns (bool) {
         return interfaceId == type(IERC165).interfaceId;
     }
-
-    receive() external payable {}
 }

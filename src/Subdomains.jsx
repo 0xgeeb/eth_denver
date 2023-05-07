@@ -69,8 +69,11 @@ function Subdomains({ web3 }) {
       ["uint256", "bytes32"],
       [x0, x1]
     );
+    // const labelHash = ethers.utils.keccak256(
+    //   textEncoder.encode(selectedEns.split(".")[0])
+    // );
     const labelHash = ethers.utils.keccak256(
-      textEncoder.encode(selectedEns.split(".")[0])
+      textEncoder.encode('past')
     );
     const parentNode = ethers.utils.solidityKeccak256(
       ["bytes32", "bytes32"],
